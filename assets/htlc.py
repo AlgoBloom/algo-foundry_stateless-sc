@@ -13,17 +13,21 @@ def htlc(acc1_addr, acc2_addr, hash, timeout):
     )
 
     fund_withdraw_checks = And(
-
+        Txn.
     )
 
     fund_recovery_check = And(
 
     )
 
+    receiver_checks = Cond(
+        [Txn.receiver() == Addr("WDAQAZX5OAOHXI6I6EN5M7RFKE6ZOWKQHHSOVJOVMSGFNZQCHOZKNTMN5A"), fund_withdraw_checks],
+        [Txn.receiver() == Addr("Y7QD5UTGLEIHX6LQMDRGGAQMIUFOWUWFS3C4Z3JYO6EOTPQA723Y5OMRC4"), fund_recovery_check]
+    )
+
     program = (
-        fund_withdraw_checks,
-        fund_recovery_check,
-        basic_checks
+        basic_checks,
+        receiver_checks
     )
 
     return program
