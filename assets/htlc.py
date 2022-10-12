@@ -13,21 +13,18 @@ def htlc(acc1_addr, acc2_addr, hash, timeout):
     )
 
     fund_withdraw_checks = And(
-        Txn.
+        basic_checks,
+        Sha256(Arg(0)) == Bytes("base64", timeout)
     )
 
     fund_recovery_check = And(
-
-    )
-
-    receiver_checks = Cond(
-        [Txn.receiver() == Addr("WDAQAZX5OAOHXI6I6EN5M7RFKE6ZOWKQHHSOVJOVMSGFNZQCHOZKNTMN5A"), fund_withdraw_checks],
-        [Txn.receiver() == Addr("Y7QD5UTGLEIHX6LQMDRGGAQMIUFOWUWFS3C4Z3JYO6EOTPQA723Y5OMRC4"), fund_recovery_check]
-    )
-
-    program = (
         basic_checks,
-        receiver_checks
+        Txn.first_valid() > Int(timeout)
+    )
+
+    program = Cond(
+        [Txn.receiver() == Addr(acc2_addr), fund_withdraw_checks],
+        [Txn.receiver() == Addr(acc1_addr), fund_recovery_check]
     )
 
     return program
