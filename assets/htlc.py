@@ -7,16 +7,32 @@ from pyteal import *
 def htlc(acc1_addr, acc2_addr, hash, timeout):
 
     # write your code here
+    basic_checks = And(
+        Txn.rekey_to() == Global.zero_address(),
+        Txn.close_remainder_to() == Global.zero_address()
+    )
 
-    program = Return(1)
+    fund_withdraw_checks = And(
+
+    )
+
+    fund_recovery_check = And(
+
+    )
+
+    program = (
+        fund_withdraw_checks,
+        fund_recovery_check,
+        basic_checks
+    )
 
     return program
 
 if __name__ == "__main__":
     # Default receiver address used if params are not supplied when deploying this contract
     params = {
-        "acc1": "R4VDREHBHVETKRPBZT6IDOQQL4FBHLBYQBQQJPIBXLTCVXYJX7Z5WLDSZY",
-        "acc2": "WRBVLPUHQZ5O2UIZAKYKKMOUSNPOFIL6ALUZQZLHBDUSIKXHAEEIELWBFQ",
+        "acc1": "WDAQAZX5OAOHXI6I6EN5M7RFKE6ZOWKQHHSOVJOVMSGFNZQCHOZKNTMN5A",
+        "acc2": "Y7QD5UTGLEIHX6LQMDRGGAQMIUFOWUWFS3C4Z3JYO6EOTPQA723Y5OMRC4",
         "hash": "QzYhq9JlYbn2QdOMrhyxVlNtNjeyvyJc/I8d8VAGfGc=",
         "timeout": 3001
     }
